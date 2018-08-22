@@ -2,6 +2,7 @@
 
 import json
 import os
+import sys
 import collections
 
 import numpy as np
@@ -58,16 +59,16 @@ if __name__ == "__main__":
     kmed_n = data.kmed / data.kmatrix
     kmin_n = data.kmin / data.kmatrix
     ah_prime = np.array(data.cprops['ah'])/(2*np.array(data.cprops['radius']))
-    print(data.theta_kmax)
 
-    if 0:
+    if 1:
         figtools.hemisphere.plot(
             data.theta_kmax,
             data.radii_kmax,
             np.log10(kmax_n),
             label=r"log$_{10}\mathit{k_{max}^\prime}$",
             cbformat="%.1f",
-            save_as=os.path.join(".", "figures", "hemisphere_kmax.png")
+            save_as=os.path.join(".", "figures", "hemisphere_kmax.png"),
+            nbars=8
         )
         figtools.hemisphere.plot(
             data.theta,
@@ -75,6 +76,7 @@ if __name__ == "__main__":
             ah_prime,
             label=r'$\mathit{a_{h}^\prime}$',
             cbformat='%.4f',
-            save_as=os.path.join(".", "figures", "hemisphere_ahprime.png")
+            save_as=os.path.join(".", "figures", "hemisphere_ahprime.png"),
+            nbars=9
         )
 
