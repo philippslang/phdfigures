@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import json
 import os
 import collections
@@ -55,12 +57,25 @@ if __name__ == "__main__":
     kmax_n = data.kmax / data.kmatrix
     kmed_n = data.kmed / data.kmatrix
     kmin_n = data.kmin / data.kmatrix
+    ah_prime = np.array(data.cprops['ah'])/(2*np.array(data.cprops['radius']))
 
-    figtools.hemisphere.plot(
-        data.theta_kmax,
-        data.radii_kmax,
-        np.log10(kmax_n),
-        label=r"log$_{10}\mathit{k_{max}^\prime}$",
-        cbformat="%.1f",
-        save_as=os.path.join(".", "figures", "hemisphere_kmax.png")
-    )
+    if 1:
+        figtools.hemisphere.plot(
+            data.theta_kmax,
+            data.radii_kmax,
+            np.log10(kmax_n),
+            label=r"log$_{10}\mathit{k_{max}^\prime}$",
+            cbformat="%.1f",
+            save_as=os.path.join(".", "figures", "hemisphere_kmax.png")
+        )
+        figtools.hemisphere.plot(
+            data.theta,
+            data.radii,
+            ah_prime,
+            label=r'$\mathit{a_{h}^\prime}$',
+            cbformat='%.4f',
+            save_as=os.path.join(".", "figures", "hemisphere_ahprime.png")
+        )
+    
+    if 0:
+        figtools.hemisphere.plot_contourf(data.theta_kmax, data.radii_kmax)

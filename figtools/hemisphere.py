@@ -60,3 +60,4 @@ def plot(
     if save_as:
         plt.savefig(save_as)
     plt.show()
+
