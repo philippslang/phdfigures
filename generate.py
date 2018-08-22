@@ -68,7 +68,8 @@ if __name__ == "__main__":
             label=r"log$_{10}\mathit{k_{max}^\prime}$",
             cbformat="%.1f",
             save_as=os.path.join(".", "figures", "hemisphere_kmax.png"),
-            nbars=8
+            nbars=8,
+            alpha=0.8
         )
         figtools.hemisphere.plot(
             data.theta,
@@ -77,6 +78,7 @@ if __name__ == "__main__":
             label=r'$\mathit{a_{h}^\prime}$',
             cbformat='%.4f',
             save_as=os.path.join(".", "figures", "hemisphere_ahprime.png"),
-            nbars=9
+            nbars=9,
+            alpha=0.8
         )
 

@@ -10,4 +10,4 @@ rcParams['legend.fontsize'] = 14
 rcParams['lines.linewidth'] = 2
 rcParams['savefig.dpi'] = 300
 rcParams['legend.loc'] = 'upper right'
-rcParams['image.cmap'] = 'hot'
+
