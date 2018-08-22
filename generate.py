@@ -58,8 +58,9 @@ if __name__ == "__main__":
     kmed_n = data.kmed / data.kmatrix
     kmin_n = data.kmin / data.kmatrix
     ah_prime = np.array(data.cprops['ah'])/(2*np.array(data.cprops['radius']))
+    print(data.theta_kmax)
 
-    if 1:
+    if 0:
         figtools.hemisphere.plot(
             data.theta_kmax,
             data.radii_kmax,
@@ -76,6 +77,4 @@ if __name__ == "__main__":
             cbformat='%.4f',
             save_as=os.path.join(".", "figures", "hemisphere_ahprime.png")
         )
-    
-    if 0:
-        figtools.hemisphere.plot_contourf(data.theta_kmax, data.radii_kmax)
+

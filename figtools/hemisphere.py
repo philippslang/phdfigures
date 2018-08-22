@@ -19,6 +19,7 @@ def plot(
     tformat="{:d}",
     as_marker=False,
     alpha=1.0,
+    nbars=None
 ):
     """Equal angle projection.
 
