@@ -6,6 +6,8 @@ import sys
 import collections
 
 import numpy as np
+import matplotlib as mpl
+import matplotlib.pyplot as plt
 
 import figtools
 
@@ -51,7 +53,13 @@ def parse_hmruns_data(data):
     )
 
 
+def parse_contactarea_data(data):
+    areas = data["areas"]
+    return [np.array(a) for a in areas]
+
+
 if __name__ == "__main__":
+    
     with open(os.path.join(".", "data", "hmruns.json")) as f:
         data = parse_hmruns_data(json.load(f))
 
@@ -60,7 +68,7 @@ if __name__ == "__main__":
     kmin_n = data.kmin / data.kmatrix
     ah_prime = np.array(data.cprops['ah'])/(2*np.array(data.cprops['radius']))
 
-    if 1:
+    if 0:
         figtools.hemisphere.plot(
             data.theta_kmax,
             data.radii_kmax,
@@ -82,3 +90,20 @@ if __name__ == "__main__":
             alpha=0.8
         )
 
+
+    with open(os.path.join(".", "data", "contactareas.json")) as f:
+        allareas = parse_contactarea_data(json.load(f))
+    
+    lsim = len(allareas) - 1
+    colors, alphas = ['blue'] + ['red'] * lsim, [1.0] + [0.3] * lsim
+    def hook(ax):
+        blue_line = mpl.lines.Line2D([], [], color='blue', label='Nemoto et al., 2009')
+        red_line = mpl.lines.Line2D([], [], color='red', alpha=0.3, label='Numerical')
+        plt.legend(handles=[blue_line,red_line])
+        i, k = 90, -5.6E-6
+        def line(x):
+            return i + k * x
+        slopeAx =  np.array([1.6E5, 1.5E7])
+        slopeAy = line(slopeAx)
+        #ax.plot(slopeAx, slopeAy, linestyle='--', lw=3, color="black")
+    figtools.contactdistribution.plot(allareas, figsize=(8,4), colors=colors, alphas=alphas, hook=hook)
