@@ -59,14 +59,14 @@ def parse_contactarea_data(data):
 
 
 if __name__ == "__main__":
-    
+
     with open(os.path.join(".", "data", "hmruns.json")) as f:
         data = parse_hmruns_data(json.load(f))
 
     kmax_n = data.kmax / data.kmatrix
     kmed_n = data.kmed / data.kmatrix
     kmin_n = data.kmin / data.kmatrix
-    ah_prime = np.array(data.cprops['ah'])/(2*np.array(data.cprops['radius']))
+    ah_prime = np.array(data.cprops["ah"]) / (2 * np.array(data.cprops["radius"]))
 
     if 0:
         figtools.hemisphere.plot(
@@ -77,33 +77,43 @@ if __name__ == "__main__":
             cbformat="%.1f",
             save_as=os.path.join(".", "figures", "hemisphere_kmax.png"),
             nbars=8,
-            alpha=0.8
+            alpha=0.8,
         )
         figtools.hemisphere.plot(
             data.theta,
             data.radii,
             ah_prime,
-            label=r'$\mathit{a_{h}^\prime}$',
-            cbformat='%.4f',
+            label=r"$\mathit{a_{h}^\prime}$",
+            cbformat="%.4f",
             save_as=os.path.join(".", "figures", "hemisphere_ahprime.png"),
             nbars=9,
-            alpha=0.8
+            alpha=0.8,
         )
-
 
     with open(os.path.join(".", "data", "contactareas.json")) as f:
         allareas = parse_contactarea_data(json.load(f))
-    
+
     lsim = len(allareas) - 1
-    colors, alphas = ['blue'] + ['red'] * lsim, [1.0] + [0.3] * lsim
+    colors, alphas = ["blue"] + ["red"] * lsim, [1.0] + [0.3] * lsim
+
     def hook(ax):
-        blue_line = mpl.lines.Line2D([], [], color='blue', label='Nemoto et al., 2009')
-        red_line = mpl.lines.Line2D([], [], color='red', alpha=0.3, label='Numerical')
-        plt.legend(handles=[blue_line,red_line])
+        blue_line = mpl.lines.Line2D([], [], color="blue", label="Nemoto et al., 2009")
+        red_line = mpl.lines.Line2D([], [], color="red", alpha=0.3, label="Numerical")
+        plt.legend(handles=[blue_line, red_line])
         i, k = 90, -5.6E-6
+
         def line(x):
             return i + k * x
-        slopeAx =  np.array([1.6E5, 1.5E7])
+
+        slopeAx = np.array([1.6E5, 1.5E7])
         slopeAy = line(slopeAx)
-        #ax.plot(slopeAx, slopeAy, linestyle='--', lw=3, color="black")
-    figtools.contactdistribution.plot(allareas, figsize=(8,4), colors=colors, alphas=alphas, hook=hook)
+        # ax.plot(slopeAx, slopeAy, linestyle='--', lw=3, color="black")
+
+    figtools.contactdistribution.plot(
+        allareas,
+        figsize=(8, 4),
+        colors=colors,
+        alphas=alphas,
+        hook=hook,
+        save_as=os.path.join(".", "figures", "contact_num_exp.png"),
+    )
