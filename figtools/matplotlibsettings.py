@@ -1,6 +1,7 @@
 from matplotlib import rcParams
 
 rcParams['font.family'] = 'sans-serif'
+#rcParams['text.usetex'] = True
 rcParams['mathtext.default'] = 'regular'
 rcParams['font.sans-serif'] = ['Helvetica']
 #rcParams['axes.color_cycle'] = ['b', 'r', 'g', 'c', 'm', 'y', 'k']

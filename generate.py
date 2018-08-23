@@ -97,17 +97,16 @@ if __name__ == "__main__":
     colors, alphas = ["blue"] + ["red"] * lsim, [1.0] + [0.3] * lsim
 
     def hook(ax):
+        i, exponent = 120000, -0.6
+        def powerlaw(x):
+            return i * x**exponent
+        slopeAx = np.array([1.6E5, 1.5E7])
+        slopeAy = powerlaw(slopeAx)
         blue_line = mpl.lines.Line2D([], [], color="blue", label="Nemoto et al., 2009")
         red_line = mpl.lines.Line2D([], [], color="red", alpha=0.3, label="Numerical")
-        plt.legend(handles=[blue_line, red_line])
-        i, k = 90, -5.6E-6
-
-        def line(x):
-            return i + k * x
-
-        slopeAx = np.array([1.6E5, 1.5E7])
-        slopeAy = line(slopeAx)
-        # ax.plot(slopeAx, slopeAy, linestyle='--', lw=3, color="black")
+        fit_line = mpl.lines.Line2D([], [], color="black", linestyle='--', label="120000 x$^{-0.6}$")
+        plt.legend(handles=[blue_line, red_line, fit_line])
+        ax.plot(slopeAx, slopeAy, linestyle='--', lw=3, color="black")
 
     figtools.contactdistribution.plot(
         allareas,
