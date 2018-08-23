@@ -55,9 +55,9 @@ def plot(
         print(np.sum(radii_bars))
         radii_bars = radii_bars / radii_bars.max()
         radii_bars = radii_bars * radii.max()
-        ax.bar(theta_bars, radii_bars, width=width_bars, bottom=0.0, color='grey', alpha=0.2, zorder=2)
+        ax.bar(theta_bars, radii_bars, width=width_bars, bottom=0.0, color='grey', alpha=0.2, zorder=5)
     if len(cprop) == 0 or as_marker:
-        ax.scatter(theta, radii, s=60, c="k", marker="x", alpha=0.5, zorder=1)
+        ax.scatter(theta, radii, s=60, c="k", marker="x", alpha=0.5, zorder=0)
 
     ax.grid(color="gray", linewidth=1, linestyle="-", alpha=0.4)
     ax.set_xticklabels(

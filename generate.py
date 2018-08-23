@@ -58,61 +58,78 @@ def parse_contactarea_data(data):
     return [np.array(a) for a in areas]
 
 
-if __name__ == "__main__":
-
-    with open(os.path.join(".", "data", "hmruns.json")) as f:
-        data = parse_hmruns_data(json.load(f))
-
-    kmax_n = data.kmax / data.kmatrix
-    kmed_n = data.kmed / data.kmatrix
-    kmin_n = data.kmin / data.kmatrix
-    ah_prime = np.array(data.cprops["ah"]) / (2 * np.array(data.cprops["radius"]))
-
-    if 0:
-        figtools.hemisphere.plot(
+def plot_hemispheres(data, nbars=None):
+    fnameapp = ""
+    if nbars is not None:
+        fnameapp = "_bars"
+    figtools.hemisphere.plot(
             data.theta_kmax,
             data.radii_kmax,
             np.log10(kmax_n),
-            label=r"log$_{10}\mathit{k_{max}^\prime}$",
+            label=r"$\mathrm{log}_\mathrm{10}\mathit{k_{max}^\prime}$",
             cbformat="%.1f",
-            save_as=os.path.join(".", "figures", "hemisphere_kmax.png"),
-            nbars=8,
+            save_as=os.path.join(".", "figures", "hemisphere_kmax{}.png".format(fnameapp)),
+            nbars=nbars,
             alpha=0.8,
         )
-        figtools.hemisphere.plot(
+    figtools.hemisphere.plot(
             data.theta,
             data.radii,
             ah_prime,
             label=r"$\mathit{a_{h}^\prime}$",
             cbformat="%.4f",
-            save_as=os.path.join(".", "figures", "hemisphere_ahprime.png"),
-            nbars=9,
+            save_as=os.path.join(".", "figures", "hemisphere_ahprime{}.png".format(fnameapp)),
+            nbars=nbars,
             alpha=0.8,
         )
 
-    with open(os.path.join(".", "data", "contactareas.json")) as f:
-        allareas = parse_contactarea_data(json.load(f))
 
-    lsim = len(allareas) - 1
-    colors, alphas = ["blue"] + ["red"] * lsim, [1.0] + [0.3] * lsim
+if __name__ == "__main__":
 
-    def hook(ax):
-        i, exponent = 120000, -0.6
-        def powerlaw(x):
-            return i * x**exponent
-        slopeAx = np.array([1.6E5, 1.5E7])
-        slopeAy = powerlaw(slopeAx)
-        blue_line = mpl.lines.Line2D([], [], color="blue", label="Nemoto et al., 2009")
-        red_line = mpl.lines.Line2D([], [], color="red", alpha=0.3, label="Numerical")
-        fit_line = mpl.lines.Line2D([], [], color="black", linestyle='--', label="120000 x$^{-0.6}$")
-        plt.legend(handles=[blue_line, red_line, fit_line])
-        ax.plot(slopeAx, slopeAy, linestyle='--', lw=3, color="black")
+    # hemisphere plots
+    if 1:
+        with open(os.path.join(".", "data", "hmruns.json")) as f:
+            data = parse_hmruns_data(json.load(f))
 
-    figtools.contactdistribution.plot(
-        allareas,
-        figsize=(8, 4),
-        colors=colors,
-        alphas=alphas,
-        hook=hook,
-        save_as=os.path.join(".", "figures", "contact_num_exp.png"),
-    )
+        kmax_n = data.kmax / data.kmatrix
+        kmed_n = data.kmed / data.kmatrix
+        kmin_n = data.kmin / data.kmatrix
+        ah_prime = np.array(data.cprops["ah"]) / (2 * np.array(data.cprops["radius"]))
+
+        from matplotlib import rc
+        rc('font',**{'family':'sans-serif','sans-serif':['Helvetica']})
+        ## for Palatino and other serif fonts use:
+        #rc('font',**{'family':'serif','serif':['Palatino']})
+        rc('text', usetex=True)
+
+        plot_hemispheres(data, nbars=None)
+        plot_hemispheres(data, nbars=8)
+
+    # contact size plot
+    if 0:
+        with open(os.path.join(".", "data", "contactareas.json")) as f:
+            allareas = parse_contactarea_data(json.load(f))
+
+        lsim = len(allareas) - 1
+        colors, alphas = ["blue"] + ["red"] * lsim, [1.0] + [0.3] * lsim
+
+        def hook(ax):
+            i, exponent = 120000, -0.6
+            def powerlaw(x):
+                return i * x**exponent
+            slopeAx = np.array([1.6E5, 1.5E7])
+            slopeAy = powerlaw(slopeAx)
+            blue_line = mpl.lines.Line2D([], [], color="blue", label="Nemoto et al., 2009")
+            red_line = mpl.lines.Line2D([], [], color="red", alpha=0.3, label="Numerical")
+            fit_line = mpl.lines.Line2D([], [], color="black", linestyle='--', label="120000 x$^{-0.6}$")
+            plt.legend(handles=[blue_line, red_line, fit_line])
+            ax.plot(slopeAx, slopeAy, linestyle='--', lw=3, color="black")
+
+        figtools.contactdistribution.plot(
+            allareas,
+            figsize=(8, 4),
+            colors=colors,
+            alphas=alphas,
+            hook=hook,
+            save_as=os.path.join(".", "figures", "contact_num_exp.png"),
+        )
